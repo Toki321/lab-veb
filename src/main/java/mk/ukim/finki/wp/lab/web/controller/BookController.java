@@ -22,13 +22,34 @@ public class BookController {
     }
 
     @GetMapping
-    public String getBooksPage(@RequestParam(required = false) String error, Model model) {
+    public String getBooksPage(@RequestParam(required = false) String error,
+                              @RequestParam(required = false) String searchText,
+                              @RequestParam(required = false) String searchRating,
+                              Model model) {
         if (error != null && !error.isEmpty()) {
             model.addAttribute("hasError", true);
             model.addAttribute("error", error);
         }
-        List<Book> books = bookService.listAll();
+
+        List<Book> books;
+
+        // Handle search functionality
+        if (searchText != null && !searchText.isEmpty() && searchRating != null && !searchRating.isEmpty()) {
+            try {
+                Double rating = Double.parseDouble(searchRating);
+                books = bookService.searchBooks(searchText, rating);
+            } catch (NumberFormatException e) {
+                books = bookService.listAll();
+            }
+        } else if (searchText != null && !searchText.isEmpty()) {
+            books = bookService.searchBooks(searchText, 0.0);
+        } else {
+            books = bookService.listAll();
+        }
+
         model.addAttribute("books", books);
+        model.addAttribute("searchText", searchText != null ? searchText : "");
+        model.addAttribute("searchRating", searchRating != null ? searchRating : "");
         return "listBooks";
     }
 

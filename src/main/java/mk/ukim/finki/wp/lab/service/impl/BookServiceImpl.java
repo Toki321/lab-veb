@@ -28,7 +28,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<Book> searchBooks(String text, Double rating) {
-        return bookRepository.searchBooks(text, rating);
+        if (text == null || text.isEmpty()) {
+            return bookRepository.findAll();
+        }
+        if (rating == null) {
+            rating = 0.0;
+        }
+        return bookRepository.findAllByTitleContainingIgnoreCaseAndAverageRatingGreaterThanEqual(text, rating);
     }
 
     @Override
