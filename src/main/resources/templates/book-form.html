@@ -33,6 +33,7 @@
         }
         input[type="text"],
         input[type="number"],
+        input[type="date"],
         select {
             width: 100%;
             padding: 10px;
@@ -43,6 +44,7 @@
         }
         input[type="text"]:focus,
         input[type="number"]:focus,
+        input[type="date"]:focus,
         select:focus {
             outline: none;
             border-color: #4CAF50;
@@ -115,13 +117,30 @@
             </div>
 
             <div class="form-group">
-                <label for="authorId">Author:</label>
-                <select id="authorId" name="authorId" required>
-                    <option value="">Select an author</option>
+                <label for="cover">Cover Type:</label>
+                <select id="cover" name="cover" required>
+                    <option value="">Select cover type</option>
+                    <option value="HARD" th:selected="${book != null && book.cover != null && book.cover.name() == 'HARD'}">Hard Cover</option>
+                    <option value="SOFT" th:selected="${book != null && book.cover != null && book.cover.name() == 'SOFT'}">Soft Cover</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="publicationDate">Publication Date:</label>
+                <input type="date"
+                       id="publicationDate"
+                       name="publicationDate"
+                       th:value="${book != null && book.publicationDate != null ? book.publicationDate : ''}"
+                       required>
+            </div>
+
+            <div class="form-group">
+                <label for="authorIds">Authors (hold Ctrl/Cmd to select multiple):</label>
+                <select id="authorIds" name="authorIds" multiple required style="height: 120px;">
                     <option th:each="author : ${authors}"
                             th:value="${author.id}"
                             th:text="${author.name + ' ' + author.surname}"
-                            th:selected="${book != null && book.author != null && book.author.id == author.id}">
+                            th:selected="${book != null && book.authors != null && #lists.contains(book.authors.![id], author.id)}">
                     </option>
                 </select>
             </div>

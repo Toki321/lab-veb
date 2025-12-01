@@ -172,7 +172,9 @@
                 <strong th:text="${book.title}"></strong> -
                 Genre: <span th:text="${book.genre}"></span>,
                 Rating: <span th:text="${book.averageRating}"></span>,
-                Author: <span th:text="${book.author != null ? book.author.name + ' ' + book.author.surname : 'Unknown'}"></span>
+                Cover: <span th:text="${book.cover}"></span>,
+                Published: <span th:text="${book.publicationDate}"></span>,
+                Authors: <span th:text="${#strings.listJoin(book.authors.![name + ' ' + surname], ', ')}"></span>
             </label>
         </div>
         <div class="book-actions">

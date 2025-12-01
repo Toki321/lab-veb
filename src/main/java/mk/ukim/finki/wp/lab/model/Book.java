@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,11 @@ public class Book {
 
     private double averageRating;
 
+    @Enumerated(EnumType.STRING)
+    private Cover cover;
+
+    private LocalDate publicationDate;
+
     @ManyToMany
     @JoinTable(
         name = "book_author",
@@ -30,16 +36,20 @@ public class Book {
     )
     private List<Author> authors = new ArrayList<>();
 
-    public Book(String title, String genre, double averageRating) {
+    public Book(String title, String genre, double averageRating, Cover cover, LocalDate publicationDate) {
         this.title = title;
         this.genre = genre;
         this.averageRating = averageRating;
+        this.cover = cover;
+        this.publicationDate = publicationDate;
     }
 
-    public Book(String title, String genre, double averageRating, List<Author> authors) {
+    public Book(String title, String genre, double averageRating, Cover cover, LocalDate publicationDate, List<Author> authors) {
         this.title = title;
         this.genre = genre;
         this.averageRating = averageRating;
+        this.cover = cover;
+        this.publicationDate = publicationDate;
         this.authors = authors;
     }
 }

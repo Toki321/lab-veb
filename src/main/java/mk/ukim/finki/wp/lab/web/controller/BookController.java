@@ -1,12 +1,14 @@
 package mk.ukim.finki.wp.lab.web.controller;
 
 import mk.ukim.finki.wp.lab.model.Book;
+import mk.ukim.finki.wp.lab.model.Cover;
 import mk.ukim.finki.wp.lab.service.AuthorService;
 import mk.ukim.finki.wp.lab.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -57,8 +59,10 @@ public class BookController {
     public String saveBook(@RequestParam String title,
                           @RequestParam String genre,
                           @RequestParam Double averageRating,
+                          @RequestParam Cover cover,
+                          @RequestParam LocalDate publicationDate,
                           @RequestParam List<Long> authorIds) {
-        bookService.save(title, genre, averageRating, authorIds);
+        bookService.save(title, genre, averageRating, cover, publicationDate, authorIds);
         return "redirect:/books";
     }
 
@@ -67,8 +71,10 @@ public class BookController {
                           @RequestParam String title,
                           @RequestParam String genre,
                           @RequestParam Double averageRating,
+                          @RequestParam Cover cover,
+                          @RequestParam LocalDate publicationDate,
                           @RequestParam List<Long> authorIds) {
-        bookService.update(bookId, title, genre, averageRating, authorIds);
+        bookService.update(bookId, title, genre, averageRating, cover, publicationDate, authorIds);
         return "redirect:/books";
     }
 
