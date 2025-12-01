@@ -38,29 +38,38 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public List<Book> findBooksByAuthorId(Long authorId) {
+        return bookRepository.findAllByAuthors_Id(authorId);
+    }
+
+    @Override
     public Optional<Book> findById(Long id) {
         return bookRepository.findById(id);
     }
 
     @Override
-    public Book save(String title, String genre, Double averageRating, Long authorId) {
-        Author author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("Author not found"));
-        Book book = new Book(title, genre, averageRating, author);
+    public Book save(String title, String genre, Double averageRating, List<Long> authorIds) {
+        List<Author> authors = authorRepository.findAllById(authorIds);
+        if (authors.isEmpty()) {
+            throw new RuntimeException("No authors found");
+        }
+        Book book = new Book(title, genre, averageRating, authors);
         return bookRepository.save(book);
     }
 
     @Override
-    public Book update(Long id, String title, String genre, Double averageRating, Long authorId) {
+    public Book update(Long id, String title, String genre, Double averageRating, List<Long> authorIds) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
-        Author author = authorRepository.findById(authorId)
-                .orElseThrow(() -> new RuntimeException("Author not found"));
+        List<Author> authors = authorRepository.findAllById(authorIds);
+        if (authors.isEmpty()) {
+            throw new RuntimeException("No authors found");
+        }
 
         book.setTitle(title);
         book.setGenre(genre);
         book.setAverageRating(averageRating);
-        book.setAuthor(author);
+        book.setAuthors(authors);
 
         return bookRepository.save(book);
     }

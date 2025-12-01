@@ -57,8 +57,8 @@ public class BookController {
     public String saveBook(@RequestParam String title,
                           @RequestParam String genre,
                           @RequestParam Double averageRating,
-                          @RequestParam Long authorId) {
-        bookService.save(title, genre, averageRating, authorId);
+                          @RequestParam List<Long> authorIds) {
+        bookService.save(title, genre, averageRating, authorIds);
         return "redirect:/books";
     }
 
@@ -67,8 +67,8 @@ public class BookController {
                           @RequestParam String title,
                           @RequestParam String genre,
                           @RequestParam Double averageRating,
-                          @RequestParam Long authorId) {
-        bookService.update(bookId, title, genre, averageRating, authorId);
+                          @RequestParam List<Long> authorIds) {
+        bookService.update(bookId, title, genre, averageRating, authorIds);
         return "redirect:/books";
     }
 
@@ -93,5 +93,13 @@ public class BookController {
     public String getAddBookPage(Model model) {
         model.addAttribute("authors", authorService.findAll());
         return "book-form";
+    }
+
+    @GetMapping("/by-author/{authorId}")
+    public String getBooksByAuthor(@PathVariable Long authorId, Model model) {
+        List<Book> books = bookService.findBooksByAuthorId(authorId);
+        model.addAttribute("books", books);
+        model.addAttribute("authorId", authorId);
+        return "listBooks";
     }
 }

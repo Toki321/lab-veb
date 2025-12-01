@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -19,9 +22,13 @@ public class Book {
 
     private double averageRating;
 
-    @ManyToOne
-    @JoinColumn(name = "author_id")
-    private Author author;
+    @ManyToMany
+    @JoinTable(
+        name = "book_author",
+        joinColumns = @JoinColumn(name = "book_id"),
+        inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private List<Author> authors = new ArrayList<>();
 
     public Book(String title, String genre, double averageRating) {
         this.title = title;
@@ -29,10 +36,10 @@ public class Book {
         this.averageRating = averageRating;
     }
 
-    public Book(String title, String genre, double averageRating, Author author) {
+    public Book(String title, String genre, double averageRating, List<Author> authors) {
         this.title = title;
         this.genre = genre;
         this.averageRating = averageRating;
-        this.author = author;
+        this.authors = authors;
     }
 }

@@ -25,7 +25,7 @@ public class Author {
     @Column(length = 1000)
     private String biography;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "authors")
     private List<Book> books = new ArrayList<>();
 
     public Author(String name, String surname, String country, String biography) {
